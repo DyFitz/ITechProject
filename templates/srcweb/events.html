@@ -139,22 +139,29 @@
       gap: 10px;
       margin-bottom: 1.5rem;
     }
+
+    /* ========== Event Card ========== */
     .event-card {
+      /* 大的白色圆角卡片 */
       background: #fff;
-      border-radius: 6px;
-      overflow: hidden;
+      border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
+      padding: 1rem; /* 让内部灰色块与边缘留出空间 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .event-card img {
+
+    /* 小的灰色圆角块（模拟图片） */
+    .event-card-image {
       width: 100%;
       height: 100px;
-      object-fit: cover;
-      display: block;
+      background-color: #ccc;
+      border-radius: 6px; /* 比卡片略小的圆角 */
+      margin-bottom: 0.5rem;
     }
-    .event-card-content {
-      padding: 0.5rem;
-    }
+
     .event-card-content h4 {
       margin: 0.5rem 0;
       font-size: 1rem;
@@ -171,7 +178,6 @@
 <!-- Top Bar -->
 <header>
   <div class="left-header">
-    <!-- Home link -> go to home page -->
     <a href="{% url 'srcweb:home' %}">Home</a>
     <input type="text" class="search-bar" placeholder="Events/Societies">
   </div>
@@ -206,30 +212,29 @@
     <!-- Category 1: Tonight -->
     <div class="category-title">Tonight</div>
     <div class="event-grid">
-      <!-- 4 Cards in a row -->
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Music Concert</h4>
           <p>8pm - 10pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Art Night</h4>
           <p>7pm - 9pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Comedy Show</h4>
           <p>9pm - 11pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Karaoke Party</h4>
           <p>10pm - Late</p>
@@ -241,28 +246,28 @@
     <div class="category-title">Popular</div>
     <div class="event-grid">
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Outdoor Cinema</h4>
           <p>6pm - 10pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Live DJ Show</h4>
           <p>9pm - Late</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Food Festival</h4>
           <p>All Day</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Night Museum</h4>
           <p>7pm - 12am</p>
@@ -273,30 +278,29 @@
     <!-- Category 3: Drinking Events -->
     <div class="category-title">Drinking Events</div>
     <div class="event-grid">
-      <!-- 4 Cards -->
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Pub Crawl</h4>
           <p>8pm - 12am</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Beer Festival</h4>
           <p>2pm - 8pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Wine Tasting</h4>
           <p>5pm - 7pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Cocktail Party</h4>
           <p>9pm - 11pm</p>
@@ -308,28 +312,28 @@
     <div class="category-title">Non-Drinking Events</div>
     <div class="event-grid">
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Art Exhibition</h4>
           <p>All Day</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Yoga Workshop</h4>
           <p>5pm - 7pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Board Game Night</h4>
           <p>7pm - 10pm</p>
         </div>
       </div>
       <div class="event-card">
-        <img src="#" alt="placeholder">
+        <div class="event-card-image"></div>
         <div class="event-card-content">
           <h4>Community Cleanup</h4>
           <p>9am - 12pm</p>
@@ -362,5 +366,4 @@
 
 </body>
 </html>
-
 
