@@ -1,42 +1,27 @@
 services:
   - type: web
-    name: ITechProject
+    name: srcwebproject
     env: python
-    # The command to build your project—typically installing your requirements.
     buildCommand: "pip install -r requirements.txt"
-    # The command to start your application using Gunicorn.
     startCommand: "gunicorn srcwebproject.wsgi:application --log-file -"
-    # Use the free plan or change as needed.
     plan: free
-    # Environment variables for your Django project.
+
     envVars:
       - key: SECRET_KEY
-        # This will pull the SECRET_KEY from your Render environment.
         fromEnv: SECRET_KEY
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        # In production, list your domain names here. For early development, you can also include localhost.
-        value: "yourdomain.com,www.yourdomain.com,127.0.0.1,localhost"
-      - key: DB_ENGINE
-        value: "django.db.backends.sqlite3"
-      - key: DB_NAME
-        # The name/path for your SQLite database file.
-        value: "db.sqlite3"
+        fromEnv: ALLOWED_HOSTS
       - key: EMAIL_HOST
-        # ProtonMail Bridge typically runs on localhost.
-        value: "127.0.0.1"
+        fromEnv: EMAIL_HOST
       - key: EMAIL_PORT
-        # Replace with the port provided by ProtonMail Bridge (often 1025).
-        value: "1025"
+        fromEnv: EMAIL_PORT
       - key: EMAIL_USE_TLS
-        value: "True"
+        fromEnv: EMAIL_USE_TLS
       - key: EMAIL_HOST_USER
-        value: "src-no-reply@protonmail.com"
+        fromEnv: EMAIL_HOST_USER
       - key: EMAIL_HOST_PASSWORD
-        # This will pull the email password from your Render environment.
         fromEnv: EMAIL_HOST_PASSWORD
       - key: DEFAULT_FROM_EMAIL
-        value: "src-no-reply@protonmail.com"
-      - key: SECURE_SSL_REDIRECT
-        value: "True"
+        fromEnv: DEFAULT_FROM_EMAIL
