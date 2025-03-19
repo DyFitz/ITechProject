@@ -122,3 +122,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Use Django's SMTP backend for sending emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Configure the SMTP server provided by ProtonMail Bridge
+EMAIL_HOST = '127.0.0.1'            # Localhost, as provided by ProtonMail Bridge
+EMAIL_PORT = 1025                   # Replace with the port shown in Bridge
+EMAIL_USE_TLS = True                # ProtonMail Bridge typically uses TLS
+EMAIL_HOST_USER = 'your_email@protonmail.com'  # Your ProtonMail email address
+EMAIL_HOST_PASSWORD = 'your_bridge_generated_password'  # The SMTP password provided by Bridge
+
+# Default from address for outgoing emails
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
