@@ -5,12 +5,11 @@ services:
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn srcwebproject.wsgi:application --log-file -"
     plan: free
-
     envVars:
       - key: SECRET_KEY
         fromEnv: SECRET_KEY
       - key: DEBUG
-        value: "False"
+        fromEnv: DEBUG
       - key: ALLOWED_HOSTS
         fromEnv: ALLOWED_HOSTS
       - key: EMAIL_HOST
