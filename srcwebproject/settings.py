@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from pathlib import Path
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,11 +22,17 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+# Initialize environment variables
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '1xtg%_)$$y39bqr(zeydbj+tz_uid!6gqbmdp9b*t%t$wsx95c'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Load the secret key and allowed hosts from environment variables
+SECRET_KEY = env('SECRET_KEY')
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 ALLOWED_HOSTS = []
 
@@ -77,10 +85,15 @@ WSGI_APPLICATION = 'srcwebproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# Database configuration using environment variables.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': env('DB_NAME', default=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': env('DB_USER', default=''),
+        'PASSWORD': env('DB_PASSWORD', default=''),
+        'HOST': env('DB_HOST', default=''),
+        'PORT': env('DB_PORT', default=''),
     }
 }
 
@@ -122,3 +135,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Specify the default auto field (recommended in Django 3.2+)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email settings for ProtonMail Bridge
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')            # e.g., 127.0.0.1 (provided by ProtonMail Bridge)
+EMAIL_PORT = env.int('EMAIL_PORT', default=1025)  # Use the port specified by ProtonMail Bridge
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # your ProtonMail account, e.g., src-no-reply@protonmail.com
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='src-no-reply@protonmail.com')
+
+# Security settings for production
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=True)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
