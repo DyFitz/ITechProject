@@ -115,17 +115,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .map-placeholder {
-            width: 100%;
-            height: 200px;
-            background-color: #ddd;
-            text-align: center;
-            line-height: 200px;
-            margin: 1rem 0;
-            border-radius: 4px;
-            color: #666;
-        }
-
         /* ========== Booking button section ========== */
         .action {
             text-align: center;
@@ -171,6 +160,14 @@
             text-align: center;
         }
 
+        .event-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
         .event-card h3 {
             margin-bottom: 0.5rem;
         }
@@ -181,6 +178,65 @@
             color: #888;
             font-size: 0.9rem;
         }
+
+        /* ========== Modal (overlay + content) ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 999; /* on top of everything */
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+        }
+        .modal-content h3 {
+            margin-bottom: 1rem;
+        }
+        .modal-content label {
+            display: block;
+            margin-top: 0.5rem;
+        }
+        .modal-content input {
+            width: 100%;
+            margin-top: 0.25rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+        .modal-content button {
+            margin-top: 1rem;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #007BFF;
+            color: #fff;
+        }
+        .modal-content button:hover {
+            background: #0056b3;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -189,15 +245,11 @@
 <header>
     <div class="top-bar">
         <div class="left-items">
-            <!-- Back button -->
             <a href="{% url 'srcweb:events' %}" class="back-btn">Back</a>
-
-            <!-- Logo or Home Title -->
             <div class="logo">
                 <h2>Home</h2>
             </div>
         </div>
-
         <div class="right-items">
             <nav>
                 <a href="#">EventSocieties</a>
@@ -235,7 +287,6 @@
             <p><strong>Max Attendees:</strong> 50</p>
             <p>
                 <strong>Hosting Society:</strong>
-                <!-- Link to dancing society page -->
                 <a href="{% url 'srcweb:dancingsociety' %}">Dancing Society</a>
             </p>
         </div>
@@ -263,29 +314,34 @@
                 <a href="http://www.gla.ac.uk/library/" target="_blank">http://www.gla.ac.uk/library/</a>
             </p>
         </div>
-
     </section>
 
     <!-- Booking button -->
     <section class="action">
-        <button>Book my place</button>
+        <button onclick="openBookingModal()">Book my place</button>
     </section>
 
-
+    <!-- Other events section -->
     <section class="other-events">
         <h2>Other events you may like</h2>
         <div class="event-card-list">
+            <!-- 1st event card with upcoming1.png -->
             <div class="event-card">
-                <h3>Event 1</h3>
-                <p>Short description here.</p>
+                <img src="{% static 'images/homepage/upcoming1.png' %}" alt="QMU Concert">
+                <h3>QMU Concert</h3>
+                <p>Thursday, Mar 10th, 7PM - 11PM</p>
             </div>
+            <!-- 2nd event card with upcoming2.png -->
             <div class="event-card">
-                <h3>Event 2</h3>
-                <p>Short description here.</p>
+                <img src="{% static 'images/homepage/upcoming2.png' %}" alt="OVO Hydro Concert">
+                <h3>OVO Hydro Concert</h3>
+                <p>Friday, Feb 21st, 7:30pm</p>
             </div>
+            <!-- 3rd event card with upcoming3.png -->
             <div class="event-card">
-                <h3>Event 3</h3>
-                <p>Short description here.</p>
+                <img src="{% static 'images/homepage/upcoming3.png' %}" alt="Charity Event">
+                <h3>Charity Event</h3>
+                <p>Sunday, Feb 23rd, 12pm</p>
             </div>
         </div>
     </section>
@@ -296,6 +352,45 @@
 <footer>
     <p>&copy; 2025 My Event</p>
 </footer>
+
+<!-- ========== Modal for Booking ========== -->
+<div class="modal-overlay" id="bookingModal" onclick="overlayClick(event)">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeBookingModal()">×</button>
+    <h3>Book My Place</h3>
+    <form>
+      <label for="username">Name</label>
+      <input type="text" id="username" name="username" placeholder="Your name..." required />
+
+      <label for="useremail">Email</label>
+      <input type="email" id="useremail" name="useremail" placeholder="Your email..." required />
+
+      <label for="userphone">Phone</label>
+      <input type="tel" id="userphone" name="userphone" placeholder="Your phone..." />
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Open the modal
+  function openBookingModal() {
+    document.getElementById('bookingModal').classList.add('show');
+  }
+
+  // Close the modal
+  function closeBookingModal() {
+    document.getElementById('bookingModal').classList.remove('show');
+  }
+
+  // Close modal if clicking outside of the modal content
+  function overlayClick(event) {
+    if (event.target.id === 'bookingModal') {
+      closeBookingModal();
+    }
+  }
+</script>
 
 </body>
 </html>
