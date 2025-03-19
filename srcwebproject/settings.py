@@ -52,6 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'srcwebproject.urls'
+
 STATIC_URL = '/static/'
 
 TEMPLATES = [
