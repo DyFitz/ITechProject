@@ -19,55 +19,80 @@
             line-height: 1.6;
         }
 
-        /* ========== Container layout ========== */
-        header, main, footer {
+        /*
+          ========== Container layout ==========
+          main and footer are set to 90% width; header is 100% width
+        */
+        main, footer {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem 0;
         }
 
-        /* ========== Top bar (header) ========== */
-        .top-bar {
+        /* ========== Top bar (header) - Modified only ========== */
+        header {
+            width: 100%;
+            background: #fff;
+            padding: 0.5rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+            z-index: 1000;
+            /* Add shadow similar to the homepage */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .left-items {
+        .left-header a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+        .search-bar {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.3rem 0.6rem;
+            width: 200px;
+        }
+        .right-header {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
-
-        .back-btn {
-            text-decoration: none;
-            color: #333;
-            padding: 0.5rem 1rem;
-            background-color: #eee;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
-        }
-        .back-btn:hover {
-            background-color: #ddd;
-        }
-
-        .logo h2 {
-            margin: 0;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #333;
-            margin-left: 1rem;
-        }
-
-        .avatar {
+        .top-avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
+            object-fit: cover;
             cursor: pointer;
-            margin-left: 1rem;
+        }
+        .dropdown-icon {
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 120px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 9999;
+        }
+        .dropdown-menu a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem;
+        }
+        .dropdown-menu a:hover {
+            background: #eee;
         }
 
         /* ========== Hero section ========== */
@@ -83,7 +108,6 @@
             margin-bottom: 2rem;
             border-radius: 8px;
         }
-
         .hero h1 {
             font-size: 2.5rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -96,24 +120,20 @@
             gap: 2rem;
             margin-bottom: 2rem;
         }
-
         .description, .event-location {
             flex: 1;
             background-color: #fff;
             padding: 1rem;
             border-radius: 8px;
-            min-width: 280px; /* Ensure it doesn't become too narrow on small screens */
+            min-width: 280px;
         }
-
         .description h2, .event-location h2 {
             margin-bottom: 1rem;
             color: #333;
         }
-
         .description p, .event-location p {
             margin-bottom: 0.5rem;
         }
-
         /* ========== Staff-specific info ========== */
         .staff-info {
             margin-top: 1rem;
@@ -126,7 +146,6 @@
             text-align: center;
             margin-bottom: 2rem;
         }
-
         .action button {
             padding: 0.75rem 1.5rem;
             font-size: 1rem;
@@ -178,10 +197,10 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            display: none; /* hidden by default */
+            display: none;
             align-items: center;
             justify-content: center;
-            z-index: 999; /* on top of everything */
+            z-index: 999;
         }
         .modal-overlay.show {
             display: flex;
@@ -225,29 +244,23 @@
 </head>
 <body>
 
-<!-- Header -->
+<!-- Header: Only the topbar is modified; everything else remains unchanged -->
 <header>
-    <div class="top-bar">
-        <div class="left-items">
-            <!-- Back button -->
-            <a href="{% url 'srcweb:events' %}" class="back-btn">Back</a>
-
-            <!-- Logo or Home Title -->
-            <div class="logo">
-                <h2>Home</h2>
-            </div>
-        </div>
-        <div class="right-items">
-            <nav>
-                <a href="#">EventSocieties</a>
-            </nav>
-            <a href="{% url 'srcweb:myaccount' %}">
-                <img
-                    src="{% static 'images/avatar.png' %}"
-                    alt="User Avatar"
-                    class="avatar"
-                />
-            </a>
+    <!-- Left side: Home link + search bar -->
+    <div class="left-header">
+        <a href="{% url 'srcweb:home' %}">Home</a>
+        <input type="text" class="search-bar" placeholder="Events/Societies">
+    </div>
+    <!-- Right side: Avatar + ⋮ icon + dropdown menu -->
+    <div class="right-header" id="rightHeader">
+        <img
+            src="{% static 'images/avatar.png' %}"
+            alt="User Avatar"
+            class="top-avatar"
+        >
+        <span class="dropdown-icon" onclick="toggleDropdown()">⋮</span>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#">Logout</a>
         </div>
     </div>
 </header>
@@ -301,7 +314,9 @@
             <p><strong>Organizer Contact:</strong> 044-0451230764</p>
             <p>
                 <strong>Website:</strong>
-                <a href="http://www.gla.ac.uk/library/" target="_blank">http://www.gla.ac.uk/library/</a>
+                <a href="http://www.gla.ac.uk/library/" target="_blank">
+                    http://www.gla.ac.uk/library/
+                </a>
             </p>
         </div>
     </section>
@@ -354,7 +369,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- 这里是示例，可在后端动态生成 -->
+        <!-- Example rows; in a real application, generate dynamically -->
         <tr>
           <td>Student A</td>
           <td>studenta@example.com</td>
@@ -375,28 +390,44 @@
         </tr>
       </tbody>
     </table>
-    <!-- Submit / Save button (optional) -->
+    <!-- Optional: Save Attendance button -->
     <button style="margin-top:1rem;">Save Attendance</button>
   </div>
 </div>
 
 <script>
-  // Show the modal
-  function openAttendeeModal() {
-    document.getElementById('attendeeModal').classList.add('show');
-  }
-
-  // Hide the modal
-  function closeAttendeeModal() {
-    document.getElementById('attendeeModal').classList.remove('show');
-  }
-
-  // Close modal if clicking outside of the modal content
-  function overlayClick(event) {
-    if (event.target.id === 'attendeeModal') {
-      closeAttendeeModal();
+    // Toggle dropdown menu
+    function toggleDropdown() {
+        const menu = document.getElementById('dropdownMenu');
+        if (menu.style.display === '' || menu.style.display === 'none') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
     }
-  }
+    // Hide dropdown if click outside
+    document.addEventListener('click', function(e) {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const rightHeader = document.getElementById('rightHeader');
+        if (!rightHeader.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+
+    // Show the attendee modal
+    function openAttendeeModal() {
+        document.getElementById('attendeeModal').classList.add('show');
+    }
+    // Hide the attendee modal
+    function closeAttendeeModal() {
+        document.getElementById('attendeeModal').classList.remove('show');
+    }
+    // Close modal if clicking outside of modal content
+    function overlayClick(event) {
+        if (event.target.id === 'attendeeModal') {
+            closeAttendeeModal();
+        }
+    }
 </script>
 
 </body>

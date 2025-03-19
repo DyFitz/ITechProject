@@ -19,13 +19,12 @@
 
     /* ========== Top Bar ========== */
     header {
-      width: 100%;
-      background: #fff;
-      padding: 0.5rem 1rem;
+      background-color: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #ddd;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .left-header a {
       text-decoration: none;
@@ -142,18 +141,18 @@
 
     /* ========== Event Card ========== */
     .event-card {
-      /* 大的白色圆角卡片 */
+
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
-      padding: 1rem; /* 让内部灰色块与边缘留出空间 */
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* 小的灰色圆角块（模拟图片） */
+
     .event-card-image {
       width: 100%;
       height: 100px;
@@ -183,7 +182,7 @@
   </div>
   <div class="right-header" id="rightHeader">
     <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="top-avatar">
-    <span class="dropdown-icon" onclick="toggleDropdown()">▼</span>
+    <span class="dropdown-icon" onclick="toggleDropdown()">⋮</span>
     <div class="dropdown-menu" id="dropdownMenu">
       <a href="#">Logout</a>
     </div>

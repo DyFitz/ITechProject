@@ -2,271 +2,341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Account</title>
-  <style>
-    /* ========== Basic reset ========== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <title>My Account</title>
+    <style>
+        /* ========== Basic reset ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      line-height: 1.6;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
 
-    /* ========== Container layout ========== */
-    header, main, footer {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 0;
-    }
+        /* ========== Container layout for main and footer ========== */
+        main, footer {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
 
-    /* ========== Top bar (header) ========== */
-    .top-bar {
+        /* ========== Top bar (header) ========== */
+    header {
+      background-color: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-    .top-bar h2 {
-      margin: 0;
-    }
-    nav a {
-      text-decoration: none;
-      color: #333;
-      margin-left: 1rem;
-    }
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      margin-left: 1rem;
-    }
-
-    /* ========== Hero section ========== */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      background: url("{% static 'images/profiletop.png' %}") center/cover no-repeat;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-    }
-    .hero h1 {
-      font-size: 2rem;
-      text-align: center;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    }
-
-    /* ========== Upcoming Events section ========== */
-    .upcoming-events {
-      margin-bottom: 2rem;
-    }
-    .upcoming-events h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .event-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-
-    /* 大白卡片 */
-    .event-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 1rem; /* 留白，给灰色占位或图片留空间 */
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* 如果有实际图片就用 <img>；如果没图就用灰色块 */
-    .event-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 6px; /* 与外框区别开一点 */
-      margin-bottom: 0.5rem;
-    }
-
-    /* 小灰框，模拟未显示图片 */
-    .event-card-image {
-      width: 100%;
-      height: 150px;
-      background-color: #ccc;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-    }
-
-    .event-card h3 {
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
-    }
-    .event-card p {
-      margin: 0.3rem 0;
-      color: #666;
-    }
-    .event-card a {
-      display: inline-block;
-      margin-top: 0.5rem;
-      text-decoration: none;
-      color: #007bff;
-      font-weight: 500;
-    }
-    .event-card a:hover {
-      text-decoration: underline;
-    }
-
-    /* ========== Reviews section ========== */
-    .my-reviews {
-      margin-bottom: 2rem;
-    }
-    .my-reviews h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .review-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-    }
-    .review-card {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 1rem;
+      padding: 10px 20px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .review-card h4 {
-      margin-bottom: 0.25rem;
-    }
-    .stars {
-      color: #FFA500; /* Orange color for star rating */
-      margin-bottom: 0.5rem;
-    }
 
-    /* ========== Footer ========== */
-    footer {
-      text-align: center;
-      color: #888;
-      font-size: 0.9rem;
-    }
-  </style>
+        .left-header a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+
+        .search-bar {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.3rem 0.6rem;
+            width: 200px;
+        }
+
+        /* Right header with avatar + dropdown */
+        .right-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .top-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .dropdown-icon {
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 120px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem;
+        }
+
+        .dropdown-menu a:hover {
+            background: #eee;
+        }
+
+        /* ========== Hero section ========== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: url("{% static 'images/profiletop.png' %}") center/cover no-repeat;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ========== Upcoming Events section ========== */
+        .upcoming-events {
+            margin-bottom: 2rem;
+        }
+
+        .upcoming-events h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .event-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .event-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card-image {
+            width: 100%;
+            height: 150px;
+            background-color: #ccc;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card h3 {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .event-card p {
+            margin: 0.3rem 0;
+            color: #666;
+        }
+
+        .event-card a {
+            display: inline-block;
+            margin-top: 0.5rem;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .event-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== Reviews section ========== */
+        .my-reviews {
+            margin-bottom: 2rem;
+        }
+
+        .my-reviews h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .review-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-card h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .stars {
+            color: #FFA500; /* Orange color for star rating */
+            margin-bottom: 0.5rem;
+        }
+
+        /* ========== Footer ========== */
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Header -->
 <header>
-  <div class="top-bar">
-    <div class="left-items">
-      <h2>My Account</h2>
+    <div class="left-header">
+        <a href="{% url 'srcweb:home' %}">Home</a>
+        <input type="text" class="search-bar" placeholder="Events/Societies">
     </div>
-    <div class="right-items">
-      <nav>
-        <a href="#">EventSocieties</a>
-      </nav>
-      <!-- User avatar -->
-      <img
-        src="{% static 'images/avatar.png' %}"
-        alt="User Avatar"
-        class="avatar"
-        onclick="window.location.href='#'"
-      />
+    <div class="right-header" id="rightHeader">
+        <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="top-avatar">
+        <span class="dropdown-icon" onclick="toggleDropdown()">⋮</span>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#">Logout</a>
+        </div>
     </div>
-  </div>
 </header>
 
 <!-- Main content -->
 <main>
 
-  <!-- Hero section -->
-  <section class="hero">
-    <h1>Welcome to Your Account</h1>
-  </section>
+    <!-- Hero section -->
+    <section class="hero">
+        <h1>Welcome to Your Account</h1>
+    </section>
 
-  <!-- My Upcoming Events section -->
-  <section class="upcoming-events">
-    <h2>My Upcoming Events</h2>
-    <div class="event-grid">
-      <!-- 1st event: QMU Concert (has real image) -->
-      <div class="event-card">
-        <img src="{% static 'images/eventdetailstop.png' %}" alt="QMU Concert">
-        <h3>QMU Concert</h3>
-        <p>Thursday, Mar 10th, 7PM - 11PM</p>
-        <a href="{% url 'srcweb:eventdetails_student' %}">View Details</a>
-      </div>
+    <!-- My Upcoming Events section -->
+    <section class="upcoming-events">
+        <h2>My Upcoming Events</h2>
+        <div class="event-grid">
+            <!-- 1st event: QMU Concert (has real image) -->
+            <div class="event-card">
+                <img src="{% static 'images/eventdetailstop.png' %}" alt="QMU Concert">
+                <h3>QMU Concert</h3>
+                <p>Thursday, Mar 10th, 7PM - 11PM</p>
+                <a href="{% url 'srcweb:eventdetails_student' %}">View Details</a>
+            </div>
 
-      <!-- 2nd event: OVO Hydro Concert (no image -> grey box) -->
-      <div class="event-card">
-        <div class="event-card-image"></div>
-        <h3>OVO Hydro Concert</h3>
-        <p>Friday, Feb 21st, 7:30pm</p>
-        <a href="#">View Details</a>
-      </div>
+            <!-- 2nd event: OVO Hydro Concert (no image -> grey box) -->
+            <div class="event-card">
+                <div class="event-card-image"></div>
+                <h3>OVO Hydro Concert</h3>
+                <p>Friday, Feb 21st, 7:30pm</p>
+                <a href="#">View Details</a>
+            </div>
 
-      <!-- 3rd event: Charity Event (no image -> grey box) -->
-      <div class="event-card">
-        <div class="event-card-image"></div>
-        <h3>Charity Event</h3>
-        <p>Sunday, Feb 23rd, 12pm</p>
-        <a href="#">View Details</a>
-      </div>
-    </div>
-  </section>
+            <!-- 3rd event: Charity Event (no image -> grey box) -->
+            <div class="event-card">
+                <div class="event-card-image"></div>
+                <h3>Charity Event</h3>
+                <p>Sunday, Feb 23rd, 12pm</p>
+                <a href="#">View Details</a>
+            </div>
+        </div>
+    </section>
 
-  <!-- My Reviews section -->
-  <section class="my-reviews">
-    <h2>My Reviews</h2>
-    <div class="review-grid">
-      <!-- Review card 1 -->
-      <div class="review-card">
-        <h4>Johnny</h4>
-        <div class="stars">★★★★★</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-      <!-- Review card 2 -->
-      <div class="review-card">
-        <h4>Johnny</h4>
-        <div class="stars">★★★★☆</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-      <!-- Review card 3 (optional) -->
-      <div class="review-card">
-        <h4>Johnny</h4>
-        <div class="stars">★★★★★</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-    </div>
-  </section>
+    <!-- My Reviews section -->
+    <section class="my-reviews">
+        <h2>My Reviews</h2>
+        <div class="review-grid">
+            <!-- Review card 1 -->
+            <div class="review-card">
+                <h4>Johnny</h4>
+                <div class="stars">★★★★★</div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+            <!-- Review card 2 -->
+            <div class="review-card">
+                <h4>Johnny</h4>
+                <div class="stars">★★★★☆</div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+            <!-- Review card 3 (optional) -->
+            <div class="review-card">
+                <h4>Johnny</h4>
+                <div class="stars">★★★★★</div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+        </div>
+    </section>
 
 </main>
 
 <!-- Footer -->
 <footer>
-  <p>&copy; 2025 My Account Page</p>
+    <p>&copy; 2025 My Account Page</p>
 </footer>
+
+
+<script>
+    // Toggle dropdown menu
+    function toggleDropdown() {
+        const menu = document.getElementById('dropdownMenu');
+        if (menu.style.display === '' || menu.style.display === 'none') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
+    }
+
+    // Hide dropdown if click outside
+    document.addEventListener('click', function (e) {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const rightHeader = document.getElementById('rightHeader');
+        if (!rightHeader.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+</script>
 
 </body>
 </html>
