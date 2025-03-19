@@ -11,13 +11,11 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       color: #333;
     }
-
     /* ========== Header / Nav ========== */
     header {
       background-color: #fff;
@@ -50,7 +48,6 @@
     .nav-right button:hover {
       background: #0056b3;
     }
-
     /* ========== Hero Section ========== */
     .hero {
       position: relative;
@@ -84,7 +81,6 @@
     .hero button:hover {
       background: #0056b3;
     }
-
     /* ========== Upcoming Events ========== */
     .upcoming-events {
       width: 90%;
@@ -133,7 +129,6 @@
     .event-card a:hover {
       text-decoration: underline;
     }
-
     /* ========== Footer (optional) ========== */
     footer {
       text-align: center;
@@ -141,6 +136,74 @@
       padding: 10px;
       color: #666;
       font-size: 0.9rem;
+    }
+    /* ========== Sign Up Modal Styles ========== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 12000;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .account-type-buttons button {
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .account-type-buttons button:hover {
+      background: #0056b3;
+    }
+    #signupForm label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+    #signupForm input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    #signupForm button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #signupForm button:hover {
+      background: #0056b3;
     }
   </style>
 </head>
@@ -155,7 +218,7 @@
   <div class="nav-right">
     <button onclick="window.location.href='{% url 'srcweb:eventdetails_student' %}'">Student Login</button>
     <button onclick="window.location.href='{% url 'srcweb:eventdetails_staff' %}'">Staff Login</button>
-    <button >Sign Up</button>
+    <button id="signupBtn">Sign Up</button>
   </div>
 </header>
 
@@ -228,6 +291,68 @@
 <footer>
   <p>&copy; 2025 Student Events</p>
 </footer>
+
+<!-- ========== Sign Up Modal ========== -->
+<div id="signupModal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeSignupModal()">×</button>
+    <h2>Create a Profile</h2>
+    <p>Select account type:</p>
+    <div class="account-type-buttons">
+      <button onclick="selectAccountType('student')">Student</button>
+      <button onclick="selectAccountType('staff')">Staff</button>
+    </div>
+    <div id="signupFormContainer" style="display:none; margin-top: 1rem;">
+      <form id="signupForm">
+        <input type="hidden" id="accountType" name="accountType" value="">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter username" required>
+        <label for="email" style="margin-top: 0.5rem;">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter email" required>
+        <label for="password" style="margin-top: 0.5rem;">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
+        <button type="submit">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Open Sign Up Modal
+  function openSignupModal() {
+    document.getElementById('signupModal').style.display = 'flex';
+  }
+  // Close Sign Up Modal
+  function closeSignupModal() {
+    document.getElementById('signupModal').style.display = 'none';
+    document.getElementById('signupFormContainer').style.display = 'none';
+    document.getElementById('accountType').value = '';
+  }
+  // Handle account type selection and show form
+  function selectAccountType(type) {
+    document.getElementById('accountType').value = type;
+    document.getElementById('signupFormContainer').style.display = 'block';
+  }
+  // Attach event listener to Sign Up button
+  document.addEventListener('DOMContentLoaded', function() {
+    // Assuming the third button in nav-right is Sign Up
+    var navRightButtons = document.querySelectorAll('.nav-right button');
+    if(navRightButtons.length >= 3) {
+      navRightButtons[2].onclick = openSignupModal;
+    }
+  });
+  // Handle form submission (for demonstration only)
+  document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var accountType = document.getElementById('accountType').value;
+    var username = document.getElementById('username').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    console.log('Creating account:', accountType, username, email, password);
+    // Here you would send the data to your backend to create the profile.
+    closeSignupModal();
+  });
+</script>
 
 </body>
 </html>

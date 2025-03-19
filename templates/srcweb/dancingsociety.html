@@ -27,7 +27,7 @@
       padding: 1rem 0;
     }
 
-    /* ========== Top bar (header) - Modified only ========== */
+    /* ========== Top bar (header) ========== */
     header {
       width: 100%;
       background: #fff;
@@ -37,9 +37,7 @@
       justify-content: space-between;
       border-bottom: 1px solid #ddd;
       position: relative;
-      /* Increased z-index so header is above other sections */
       z-index: 10000;
-      /* Add shadow similar to the homepage */
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .left-header a {
@@ -81,7 +79,6 @@
       width: 120px;
       display: none;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      /* Increased z-index so dropdown appears above the hero image */
       z-index: 11000;
     }
     .dropdown-menu a {
@@ -178,6 +175,71 @@
       color: #666;
       font-size: 0.9rem;
     }
+
+    /* ========== Modals for Create and Edit ========== */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 12000;
+    }
+    .modal-overlay.show {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 8px;
+      padding: 1.5rem;
+      position: relative;
+    }
+    .modal-content h2 {
+      margin-bottom: 1rem;
+    }
+    .modal-content label {
+      display: block;
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+    .modal-content input,
+    .modal-content textarea,
+    .modal-content select {
+      width: 100%;
+      margin-top: 0.25rem;
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+    .modal-content textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .modal-content button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #007BFF;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .modal-content button:hover {
+      background: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -211,13 +273,14 @@
     <div class="my-events-header">
       <h2>My Events</h2>
       <div class="event-buttons">
-        <button>Create Events</button>
-        <button>Edit Events</button>
+        <!-- We only add onclick, not changing existing logic -->
+        <button onclick="openCreateModal()">Create Events</button>
+        <button onclick="openEditModal()">Edit Events</button>
       </div>
     </div>
 
     <!-- Ongoing Events -->
-    <div class="event-section">
+    <div class="event-section" id="ongoingEventsSection">
       <h3>Ongoing Events</h3>
       <div class="event-grid">
         <!-- Card 1 -->
@@ -294,6 +357,220 @@
     </div>
   </section>
 </main>
+
+<!-- ========== Create Event Modal ========== -->
+<div class="modal-overlay" id="createEventModal" onclick="overlayClick(event)">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeCreateModal()">×</button>
+    <h2>Create Event</h2>
+
+    <label for="createTitle">Event Title</label>
+    <input type="text" id="createTitle" placeholder="e.g. New Match vs. Team B">
+
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+      <div style="flex: 1;">
+        <label for="createStart">Start Time</label>
+        <input type="text" id="createStart" placeholder="e.g. Monday, 3pm">
+      </div>
+      <div style="flex: 1;">
+        <label for="createEnd">End Time</label>
+        <input type="text" id="createEnd" placeholder="e.g. Monday, 5pm">
+      </div>
+    </div>
+
+    <label for="createImage" style="margin-top: 1rem;">Event Image (URL or file path)</label>
+    <input type="text" id="createImage" placeholder="e.g. /static/images/match.png">
+
+    <label for="createDesc" style="margin-top: 1rem;">Event Description</label>
+    <textarea id="createDesc" placeholder="Describe the event..."></textarea>
+
+    <!-- The only addition: an onclick that appends the event to Ongoing Events -->
+    <button style="margin-top: 1rem;" onclick="handleCreateEvent()">Create Event</button>
+  </div>
+</div>
+
+<!-- ========== Edit Event Modal ========== -->
+<div class="modal-overlay" id="editEventModal" onclick="overlayClick(event)">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeEditModal()">×</button>
+    <h2>Edit Event</h2>
+
+    <!-- Select which ongoing event to edit -->
+    <label for="editEventSelect">Choose an ongoing event:</label>
+    <select id="editEventSelect"></select>
+
+    <label for="editTitle" style="margin-top: 1rem;">Event Title</label>
+    <input type="text" id="editTitle">
+
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+      <div style="flex: 1;">
+        <label for="editStart">Start Time</label>
+        <input type="text" id="editStart">
+      </div>
+      <div style="flex: 1;">
+        <label for="editEnd">End Time</label>
+        <input type="text" id="editEnd">
+      </div>
+    </div>
+
+    <label for="editImage" style="margin-top: 1rem;">Event Image (URL or file path)</label>
+    <input type="text" id="editImage">
+
+    <label for="editDesc" style="margin-top: 1rem;">Event Description</label>
+    <textarea id="editDesc"></textarea>
+
+    <button style="margin-top: 1rem;">Save Changes</button>
+  </div>
+</div>
+
+<script>
+  // Dropdown toggle
+  function toggleDropdown() {
+    const menu = document.getElementById('dropdownMenu');
+    if (menu.style.display === '' || menu.style.display === 'none') {
+      menu.style.display = 'block';
+    } else {
+      menu.style.display = 'none';
+    }
+  }
+  document.addEventListener('click', function(e) {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const rightHeader = document.getElementById('rightHeader');
+    if (!rightHeader.contains(e.target)) {
+      dropdownMenu.style.display = 'none';
+    }
+  });
+
+  // Open/Close Create Modal
+  function openCreateModal() {
+    document.getElementById('createEventModal').classList.add('show');
+  }
+  function closeCreateModal() {
+    document.getElementById('createEventModal').classList.remove('show');
+  }
+
+  // Open/Close Edit Modal
+  function openEditModal() {
+    populateOngoingEvents();
+    document.getElementById('editEventModal').classList.add('show');
+  }
+  function closeEditModal() {
+    document.getElementById('editEventModal').classList.remove('show');
+  }
+
+  // Close modal if clicking outside the modal content
+  function overlayClick(event) {
+    if (event.target.classList.contains('modal-overlay')) {
+      closeCreateModal();
+      closeEditModal();
+    }
+  }
+
+  // Gather Ongoing Events and populate the edit dropdown
+  function populateOngoingEvents() {
+    // The first "ongoing events" is identified by id=ongoingEventsSection
+    const ongoingSection = document.getElementById('ongoingEventsSection');
+    const eventGrid = ongoingSection.querySelector('.event-grid');
+    const eventCards = eventGrid.querySelectorAll('.event-card');
+    const select = document.getElementById('editEventSelect');
+
+    select.innerHTML = '';
+
+    eventCards.forEach((card, index) => {
+      const title = card.querySelector('h4')?.innerText || 'Untitled Event';
+      const time = card.querySelector('p')?.innerText || 'No time';
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = `${title} (${time})`;
+      select.appendChild(option);
+    });
+
+    if (eventCards.length > 0) {
+      fillEditForm(0);
+    }
+
+    select.onchange = function() {
+      const selectedIndex = parseInt(this.value, 10);
+      fillEditForm(selectedIndex);
+    };
+  }
+
+  // Fill the Edit form with data from the selected Ongoing Event
+  function fillEditForm(index) {
+    const ongoingSection = document.getElementById('ongoingEventsSection');
+    const eventGrid = ongoingSection.querySelector('.event-grid');
+    const eventCards = eventGrid.querySelectorAll('.event-card');
+    if (!eventCards[index]) return;
+
+    const card = eventCards[index];
+    const title = card.querySelector('h4')?.innerText || '';
+    const timeText = card.querySelector('p')?.innerText || '';
+    let startTime = '';
+    let endTime = '';
+    if (timeText.includes('-')) {
+      const parts = timeText.split('-');
+      startTime = parts[0].trim();
+      endTime = parts[1].trim();
+    } else {
+      startTime = timeText;
+    }
+
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editStart').value = startTime;
+    document.getElementById('editEnd').value = endTime;
+    document.getElementById('editImage').value = '';
+    document.getElementById('editDesc').value = '';
+  }
+
+  // Handle the creation of a new event and append it to the Ongoing Events
+  function handleCreateEvent() {
+    const title = document.getElementById('createTitle').value.trim() || 'Untitled Event';
+    const start = document.getElementById('createStart').value.trim();
+    const end = document.getElementById('createEnd').value.trim();
+    const image = document.getElementById('createImage').value.trim();
+    // const desc = document.getElementById('createDesc').value.trim(); // Not displayed in the card
+
+    // Build new .event-card
+    const newCard = document.createElement('div');
+    newCard.className = 'event-card';
+
+    let cardHTML = '';
+    if (image) {
+      // Use an actual image if provided
+      cardHTML += `
+        <img src="${image}" style="width:100%; height:150px; object-fit:cover; border-radius:6px; margin-bottom:0.5rem;" alt="Event Image">
+      `;
+    } else {
+      // Otherwise, use the placeholder
+      cardHTML += `<div class="placeholder"></div>`;
+    }
+
+    const timeText = start && end ? `${start} - ${end}` : (start || 'No time');
+    cardHTML += `
+      <div class="event-card-content">
+        <h4>${title}</h4>
+        <p>${timeText}</p>
+      </div>
+    `;
+
+    newCard.innerHTML = cardHTML;
+
+    // Append to the Ongoing Events grid
+    const ongoingSection = document.getElementById('ongoingEventsSection');
+    const eventGrid = ongoingSection.querySelector('.event-grid');
+    eventGrid.appendChild(newCard);
+
+    // Clear fields
+    document.getElementById('createTitle').value = '';
+    document.getElementById('createStart').value = '';
+    document.getElementById('createEnd').value = '';
+    document.getElementById('createImage').value = '';
+    document.getElementById('createDesc').value = '';
+
+    // Close the modal
+    closeCreateModal();
+  }
+</script>
 
 </body>
 </html>
