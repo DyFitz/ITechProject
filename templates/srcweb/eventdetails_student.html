@@ -1,291 +1,39 @@
+{% extends "srcweb/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>QMU Concert - Event Details</title>
-    <style>
-        /* ========== Basic reset ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
+{% block title %}QMU Concert - Event Details{% endblock title %}
 
-        /*
-          ========== Overall Layout ==========
-          仅对 main 和 footer 应用容器宽度限制；header 占据 100%
-        */
-        main, footer {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 0;
-        }
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/eventdetails_student.css' %}">
+{% endblock extra_css %}
 
-        /* ========== Top bar (header) ========== */
-    header {
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-        /* 左侧部分：Home 链接 + 搜索框 */
-        .left-header a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            margin-right: 1rem;
-        }
-        .search-bar {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 0.3rem 0.6rem;
-            width: 200px;
-        }
-
-        /* 右侧部分：头像 + 下拉菜单触发图标 */
-        .right-header {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .top-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-        }
-        .dropdown-icon {
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .dropdown-menu {
-            position: absolute;
-            top: 40px;
-            right: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 120px;
-            display: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            /* 确保下拉菜单在其它元素（如图片）之上 */
-            z-index: 9999;
-        }
-        .dropdown-menu a {
-            display: block;
-            text-decoration: none;
-            color: #333;
-            padding: 0.5rem;
-        }
-        .dropdown-menu a:hover {
-            background: #eee;
-        }
-
-        /* ========== Hero section ========== */
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            background: url("{% static 'images/eventdetailstop.png' %}") center/cover no-repeat;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        /* ========== Event details section ========== */
-        .event-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .description, .event-location {
-            flex: 1;
-            background-color: #fff;
-            padding: 1rem;
-            border-radius: 8px;
-            min-width: 280px;
-        }
-
-        .description h2, .event-location h2 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .description p, .event-location p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* ========== Booking button section ========== */
-        .action {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .action button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .action button:hover {
-            background-color: #0056b3;
-        }
-
-        /* ========== Other events section ========== */
-        .other-events {
-            margin-bottom: 2rem;
-        }
-
-        .other-events h2 {
-            margin-bottom: 1rem;
-        }
-
-        .event-card-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .event-card {
-            flex: 1;
-            min-width: 200px;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .event-card img {
-            width: 100%;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 0.5rem;
-        }
-
-        .event-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        /* ========== Footer ========== */
-        footer {
-            text-align: center;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* ========== Modal (overlay + content) ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal-content {
-            background: #fff;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 8px;
-            padding: 1.5rem;
-            position: relative;
-        }
-        .modal-content h3 {
-            margin-bottom: 1rem;
-        }
-        .modal-content label {
-            display: block;
-            margin-top: 0.5rem;
-        }
-        .modal-content input {
-            width: 100%;
-            margin-top: 0.25rem;
-            padding: 0.5rem;
-            box-sizing: border-box;
-        }
-        .modal-content button {
-            margin-top: 1rem;
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background: #007BFF;
-            color: #fff;
-        }
-        .modal-content button:hover {
-            background: #0056b3;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Header: 占据页面全宽 -->
+{% block header %}
 <header>
-    <!-- 左侧：Home + 搜索框 -->
-    <div class="left-header">
-        <a href="{% url 'srcweb:home' %}">Home</a>
-        <input type="text" class="search-bar" placeholder="Events/Societies">
-    </div>
-    <!-- 右侧：头像 + ⋮ + 下拉菜单 -->
-    <div class="right-header" id="rightHeader">
-        <img
-            src="{% static 'images/avatar.png' %}"
-            alt="User Avatar"
-            class="top-avatar"
-        >
-        <span class="dropdown-icon" onclick="toggleDropdown()">⋮</span>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="#">Logout</a>
+    <div class="top-bar">
+        <div class="left-items">
+            <a href="{% url 'srcweb:events' %}" class="back-btn">Back</a>
+            <div class="logo">
+                <h2>Home</h2>
+            </div>
+        </div>
+        <div class="right-items">
+            <nav>
+                <a href="#">EventSocieties</a>
+            </nav>
+            <a href="{% url 'srcweb:myaccount' %}">
+                <img
+                    src="{% static 'images/avatar.png' %}"
+                    alt="User Avatar"
+                    class="avatar"
+                />
+            </a>
         </div>
     </div>
 </header>
+{% endblock header %}
 
+{% block content %}
 <!-- Main content -->
 <main>
     <!-- Hero section -->
@@ -331,9 +79,7 @@
             <p><strong>Organizer Contact:</strong> 044-0451230764</p>
             <p>
                 <strong>Website:</strong>
-                <a href="http://www.gla.ac.uk/library/" target="_blank">
-                    http://www.gla.ac.uk/library/
-                </a>
+                <a href="http://www.gla.ac.uk/library/" target="_blank">http://www.gla.ac.uk/library/</a>
             </p>
         </div>
     </section>
@@ -368,66 +114,34 @@
         </div>
     </section>
 </main>
+{% endblock content %}
 
-<!-- Footer -->
+{% block footer %}
 <footer>
     <p>&copy; 2025 My Event</p>
 </footer>
+{% endblock footer %}
 
+{% block extra_js %}
 <!-- ========== Modal for Booking ========== -->
 <div class="modal-overlay" id="bookingModal" onclick="overlayClick(event)">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeBookingModal()">×</button>
-    <h3>Book My Place</h3>
-    <form>
-      <label for="username">Name</label>
-      <input type="text" id="username" name="username" placeholder="Your name..." required />
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeBookingModal()">×</button>
+        <h3>Book My Place</h3>
+        <form>
+            <label for="username">Name</label>
+            <input type="text" id="username" name="username" placeholder="Your name..." required/>
 
-      <label for="useremail">Email</label>
-      <input type="email" id="useremail" name="useremail" placeholder="Your email..." required />
+            <label for="useremail">Email</label>
+            <input type="email" id="useremail" name="useremail" placeholder="Your email..." required/>
 
-      <label for="userphone">Phone</label>
-      <input type="tel" id="userphone" name="userphone" placeholder="Your phone..." />
+            <label for="userphone">Phone</label>
+            <input type="tel" id="userphone" name="userphone" placeholder="Your phone..."/>
 
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </div>
 
-<script>
-    // Toggle dropdown menu
-    function toggleDropdown() {
-        const menu = document.getElementById('dropdownMenu');
-        if (menu.style.display === '' || menu.style.display === 'none') {
-            menu.style.display = 'block';
-        } else {
-            menu.style.display = 'none';
-        }
-    }
-    // Hide dropdown if click outside
-    document.addEventListener('click', function(e) {
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const rightHeader = document.getElementById('rightHeader');
-        if (!rightHeader.contains(e.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
-
-    // Open the booking modal
-    function openBookingModal() {
-        document.getElementById('bookingModal').classList.add('show');
-    }
-    // Close the booking modal
-    function closeBookingModal() {
-        document.getElementById('bookingModal').classList.remove('show');
-    }
-    // Close modal if clicking outside of modal content
-    function overlayClick(event) {
-        if (event.target.id === 'bookingModal') {
-            closeBookingModal();
-        }
-    }
-</script>
-
-</body>
-</html>
+<script src="{% static 'js/eventdetails_student.js' %}"></script>
+{% endblock extra_js %}

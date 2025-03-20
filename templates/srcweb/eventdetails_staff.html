@@ -1,434 +1,160 @@
+{% extends 'srcweb/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>QMU Concert - Event Details (Staff)</title>
-    <style>
-        /* ========== Basic reset ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
+{% block title %}QMU Concert - Event Details (Staff){% endblock title %}
 
-        /*
-          ========== Container layout ==========
-          main and footer are set to 90% width; header is 100% width
-        */
-        main, footer {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 0;
-        }
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/eventdetails_staff.css' %}">
+{% endblock extra_css %}
 
-        /* ========== Top bar (header) - Modified only ========== */
-        header {
-            width: 100%;
-            background: #fff;
-            padding: 0.5rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #ddd;
-            position: relative;
-            z-index: 1000;
-            /* Add shadow similar to the homepage */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .left-header a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            margin-right: 1rem;
-        }
-        .search-bar {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 0.3rem 0.6rem;
-            width: 200px;
-        }
-        .right-header {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .top-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-        }
-        .dropdown-icon {
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .dropdown-menu {
-            position: absolute;
-            top: 40px;
-            right: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 120px;
-            display: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 9999;
-        }
-        .dropdown-menu a {
-            display: block;
-            text-decoration: none;
-            color: #333;
-            padding: 0.5rem;
-        }
-        .dropdown-menu a:hover {
-            background: #eee;
-        }
-
-        /* ========== Hero section ========== */
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            background: url("{% static 'images/eventdetailstop.png' %}") center/cover no-repeat;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        /* ========== Event details section ========== */
-        .event-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        .description, .event-location {
-            flex: 1;
-            background-color: #fff;
-            padding: 1rem;
-            border-radius: 8px;
-            min-width: 280px;
-        }
-        .description h2, .event-location h2 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        .description p, .event-location p {
-            margin-bottom: 0.5rem;
-        }
-        /* ========== Staff-specific info ========== */
-        .staff-info {
-            margin-top: 1rem;
-            font-weight: 500;
-            color: #555;
-        }
-
-        /* ========== Button section ========== */
-        .action {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .action button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-        .action button:hover {
-            background-color: #0056b3;
-        }
-
-        /* ========== Other events section ========== */
-        .other-events {
-            margin-bottom: 2rem;
-        }
-        .other-events h2 {
-            margin-bottom: 1rem;
-        }
-        .event-card-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .event-card {
-            flex: 1;
-            min-width: 200px;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-        }
-        .event-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        /* ========== Footer ========== */
-        footer {
-            text-align: center;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* ========== Modal (overlay + content) ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal-content {
-            background: #fff;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 8px;
-            padding: 1.5rem;
-            position: relative;
-        }
-        .modal-content h3 {
-            margin-bottom: 1rem;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        /* Table for attendees list */
-        .attendee-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .attendee-table th,
-        .attendee-table td {
-            border: 1px solid #ccc;
-            padding: 0.5rem;
-            text-align: left;
-        }
-        .attendee-table th {
-            background-color: #f2f2f2;
-        }
-
-    </style>
-</head>
-<body>
-
-<!-- Header: Only the topbar is modified; everything else remains unchanged -->
+{% block header %}
 <header>
-    <!-- Left side: Home link + search bar -->
-    <div class="left-header">
-        <a href="{% url 'srcweb:home' %}">Home</a>
-        <input type="text" class="search-bar" placeholder="Events/Societies">
-    </div>
-    <!-- Right side: Avatar + ⋮ icon + dropdown menu -->
-    <div class="right-header" id="rightHeader">
-        <img
-            src="{% static 'images/avatar.png' %}"
-            alt="User Avatar"
-            class="top-avatar"
-        >
-        <span class="dropdown-icon" onclick="toggleDropdown()">⋮</span>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="#">Logout</a>
+    <div class="top-bar">
+        <div class="left-items">
+            <!-- Back button -->
+            <a href="{% url 'srcweb:events' %}" class="back-btn">Back</a>
+            <!-- Logo or Home Title -->
+            <div class="logo">
+                <h2>Home</h2>
+            </div>
+        </div>
+        <div class="right-items">
+            <nav>
+                <a href="#">EventSocieties</a>
+            </nav>
+            <a href="{% url 'srcweb:myaccount' %}">
+                <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="avatar">
+            </a>
         </div>
     </div>
 </header>
+{% endblock header %}
 
-<!-- Main content -->
-<main>
+{% block content %}
+<!-- Hero section -->
+<section class="hero">
+    <h1>QMU Concert</h1>
+</section>
 
-    <!-- Hero section -->
-    <section class="hero">
-        <h1>QMU Concert</h1>
-    </section>
+<!-- Event details section -->
+<section class="event-details">
+    <!-- Left side: description, info -->
+    <div class="description">
+        <h2>Description</h2>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.
+        </p>
+        <p><strong>Tags:</strong> #Music #Concert</p>
+        <p><strong>Hours:</strong> 7PM - 11PM</p>
+        <p><strong>Max Attendees:</strong> 50</p>
+        <p class="staff-info">
+            <strong>Number of registered:</strong> 20
+        </p>
+        <p>
+            <strong>Hosting Society:</strong>
+            <a href="{% url 'srcweb:dancingsociety' %}">Dancing Society</a>
+        </p>
+    </div>
 
-    <!-- Event details section -->
-    <section class="event-details">
-        <!-- Left side: description, info -->
-        <div class="description">
-            <h2>Description</h2>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.
-            </p>
-            <p><strong>Tags:</strong> #Music #Concert</p>
-            <p><strong>Hours:</strong> 7PM - 11PM</p>
-            <p><strong>Max Attendees:</strong> 50</p>
-            <p class="staff-info">
-                <strong>Number of registered:</strong> 20
-            </p>
-            <p>
-                <strong>Hosting Society:</strong>
-                <a href="{% url 'srcweb:dancingsociety' %}">Dancing Society</a>
-            </p>
+    <!-- Right side: location, map, contact -->
+    <div class="event-location">
+        <h2>Event Location</h2>
+        <p>University Of..., Hillhead St, Glasgow G12 8QE</p>
+        <!-- Embedded Google Map. Clicking the map opens the full view in a new tab -->
+        <a href="https://www.google.com/maps/place/University+of+Glasgow" target="_blank">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12976.326882352516!2d-4.25143305!3d55.86423785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488847a4204d50d9%3A0x8ec12345678!2sUniversity+of+Glasgow!5e0!3m2!1sen!2suk!4v1589654963141!5m2!1sen!2suk"
+                width="100%"
+                height="200"
+                style="border:0;"
+                allowfullscreen=""
+                aria-hidden="false"
+                tabindex="0">
+            </iframe>
+        </a>
+        <p><strong>Organizer Contact:</strong> 044-0451230764</p>
+        <p>
+            <strong>Website:</strong>
+            <a href="http://www.gla.ac.uk/library/" target="_blank">http://www.gla.ac.uk/library/</a>
+        </p>
+    </div>
+</section>
+
+<!-- Staff actions -->
+<section class="action">
+    <!-- Button to open attendees list -->
+    <button onclick="openAttendeeModal()">Attendance Checking</button>
+</section>
+
+<!-- Other events section -->
+<section class="other-events">
+    <h2>Other events you may like</h2>
+    <div class="event-card-list">
+        <div class="event-card">
+            <h3>Event 1</h3>
+            <p>Short description here.</p>
         </div>
-
-        <!-- Right side: location, map, contact -->
-        <div class="event-location">
-            <h2>Event Location</h2>
-            <p>University Of..., Hillhead St, Glasgow G12 8QE</p>
-            <!-- Embedded Google Map. Clicking the map opens the full view in a new tab -->
-            <a href="https://www.google.com/maps/place/University+of+Glasgow" target="_blank">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12976.326882352516!2d-4.25143305!3d55.86423785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488847a4204d50d9%3A0x8ec12345678!2sUniversity+of+Glasgow!5e0!3m2!1sen!2suk!4v1589654963141!5m2!1sen!2suk"
-                    width="100%"
-                    height="200"
-                    frameborder="0"
-                    style="border:0;"
-                    allowfullscreen=""
-                    aria-hidden="false"
-                    tabindex="0">
-                </iframe>
-            </a>
-            <p><strong>Organizer Contact:</strong> 044-0451230764</p>
-            <p>
-                <strong>Website:</strong>
-                <a href="http://www.gla.ac.uk/library/" target="_blank">
-                    http://www.gla.ac.uk/library/
-                </a>
-            </p>
+        <div class="event-card">
+            <h3>Event 2</h3>
+            <p>Short description here.</p>
         </div>
-    </section>
-
-    <!-- Staff actions -->
-    <section class="action">
-        <!-- Button to open attendees list -->
-        <button onclick="openAttendeeModal()">Attendance Checking</button>
-    </section>
-
-    <!-- Other events section -->
-    <section class="other-events">
-        <h2>Other events you may like</h2>
-        <div class="event-card-list">
-            <div class="event-card">
-                <h3>Event 1</h3>
-                <p>Short description here.</p>
-            </div>
-            <div class="event-card">
-                <h3>Event 2</h3>
-                <p>Short description here.</p>
-            </div>
-            <div class="event-card">
-                <h3>Event 3</h3>
-                <p>Short description here.</p>
-            </div>
+        <div class="event-card">
+            <h3>Event 3</h3>
+            <p>Short description here.</p>
         </div>
-    </section>
+    </div>
+</section>
+{% endblock content %}
 
-</main>
-
-<!-- Footer -->
+{% block footer %}
 <footer>
     <p>&copy; 2025 My Event</p>
 </footer>
 
 <!-- ========== Modal for Attendee Checking ========== -->
 <div class="modal-overlay" id="attendeeModal" onclick="overlayClick(event)">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeAttendeeModal()">×</button>
-    <h3>Registered Attendees</h3>
-    <!-- Example table listing students -->
-    <table class="attendee-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Checked In</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Example rows; in a real application, generate dynamically -->
-        <tr>
-          <td>Student A</td>
-          <td>studenta@example.com</td>
-          <td>123-456-7890</td>
-          <td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td>Student B</td>
-          <td>studentb@example.com</td>
-          <td>234-567-8901</td>
-          <td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td>Student C</td>
-          <td>studentc@example.com</td>
-          <td>345-678-9012</td>
-          <td><input type="checkbox"></td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- Optional: Save Attendance button -->
-    <button style="margin-top:1rem;">Save Attendance</button>
-  </div>
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeAttendeeModal()">×</button>
+        <h3>Registered Attendees</h3>
+        <!-- Example table listing students -->
+        <table class="attendee-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Checked In</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Dylan</td>
+                <td>studenta@example.com</td>
+                <td>123-456-7890</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>Xueying</td>
+                <td>studentb@example.com</td>
+                <td>234-567-8901</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>Alex</td>
+                <td>studentc@example.com</td>
+                <td>345-678-9012</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- Submit / Save button (optional) -->
+        <button style="margin-top:1rem;">Save Attendance</button>
+    </div>
 </div>
+{% endblock footer %}
 
-<script>
-    // Toggle dropdown menu
-    function toggleDropdown() {
-        const menu = document.getElementById('dropdownMenu');
-        if (menu.style.display === '' || menu.style.display === 'none') {
-            menu.style.display = 'block';
-        } else {
-            menu.style.display = 'none';
-        }
-    }
-    // Hide dropdown if click outside
-    document.addEventListener('click', function(e) {
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const rightHeader = document.getElementById('rightHeader');
-        if (!rightHeader.contains(e.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
+{% block extra_js %}
+<script src="{% static 'js/eventdetails_staff.js' %}"></script>
+{% endblock extra_js %}
 
-    // Show the attendee modal
-    function openAttendeeModal() {
-        document.getElementById('attendeeModal').classList.add('show');
-    }
-    // Hide the attendee modal
-    function closeAttendeeModal() {
-        document.getElementById('attendeeModal').classList.remove('show');
-    }
-    // Close modal if clicking outside of modal content
-    function overlayClick(event) {
-        if (event.target.id === 'attendeeModal') {
-            closeAttendeeModal();
-        }
-    }
-</script>
-
-</body>
-</html>

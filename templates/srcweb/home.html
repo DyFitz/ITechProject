@@ -1,358 +1,90 @@
+{% extends "srcweb/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Student Events - Home</title>
-  <style>
-    /* ========== Basic reset ========== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    /* ========== Header / Nav ========== */
-    header {
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .nav-left a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-    }
-    .nav-right button {
-      margin-left: 1rem;
-      padding: 6px 12px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .nav-right button:hover {
-      background: #0056b3;
-    }
-    /* ========== Hero Section ========== */
-    .hero {
-      position: relative;
-      width: 90%;
-      max-width: 1200px;
-      margin: 20px auto;
-      background: url("{% static 'images/homepage/hometop.png' %}") center/cover no-repeat;
-      height: 300px;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #fff;
-    }
-    .hero h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    }
-    .hero button {
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 4px;
-      background: #007bff;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .hero button:hover {
-      background: #0056b3;
-    }
-    /* ========== Upcoming Events ========== */
-    .upcoming-events {
-      width: 90%;
-      max-width: 1200px;
-      margin: 20px auto;
-    }
-    .upcoming-events h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    .event-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-    }
-    .event-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    .event-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      display: block;
-      border-radius: 4px;
-      margin-bottom: 0.5rem;
-    }
-    .event-card h3 {
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
-    }
-    .event-card p {
-      margin: 0.3rem 0;
-      color: #666;
-    }
-    .event-card a {
-      display: inline-block;
-      margin-top: 0.5rem;
-      text-decoration: none;
-      color: #007bff;
-      font-weight: 500;
-    }
-    .event-card a:hover {
-      text-decoration: underline;
-    }
-    /* ========== Footer (optional) ========== */
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      padding: 10px;
-      color: #666;
-      font-size: 0.9rem;
-    }
-    /* ========== Sign Up Modal Styles ========== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 12000;
-    }
-    .modal-content {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      max-width: 500px;
-      width: 90%;
-      position: relative;
-    }
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-    .account-type-buttons button {
-      padding: 0.5rem 1rem;
-      margin-right: 0.5rem;
-      border: none;
-      border-radius: 4px;
-      background: #007bff;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .account-type-buttons button:hover {
-      background: #0056b3;
-    }
-    #signupForm label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 500;
-    }
-    #signupForm input {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    #signupForm button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 4px;
-      background: #007bff;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #signupForm button:hover {
-      background: #0056b3;
-    }
-  </style>
-</head>
-<body>
+{% block title %}Student Events - Home{% endblock title %}
 
-<!-- Header / Navbar -->
-<header>
-  <div class="nav-left">
-    <a href="{% url 'srcweb:home' %}">Home</a>
-    <a href="{% url 'srcweb:events' %}">Events</a>
-  </div>
-  <div class="nav-right">
-    <button onclick="window.location.href='{% url 'srcweb:eventdetails_student' %}'">Student Login</button>
-    <button onclick="window.location.href='{% url 'srcweb:eventdetails_staff' %}'">Staff Login</button>
-    <button id="signupBtn">Sign Up</button>
-  </div>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock extra_css %}
+
+{% block header %}
+<header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
+    <div class="nav-left">
+        <a href="{% url 'srcweb:home' %}" class="me-3">Home</a>
+        <a href="{% url 'srcweb:events' %}">Events</a>
+    </div>
+    <div class="nav-right">
+        <button id="student-login" data-url="{% url 'srcweb:eventdetails_student' %}" class="btn btn-primary me-2">Student Login</button>
+        <button id="staff-login" data-url="{% url 'srcweb:eventdetails_staff' %}" class="btn btn-primary me-2">Staff Login</button>
+        <button class="btn btn-secondary">Sign Up</button>
+    </div>
 </header>
+{% endblock header %}
 
+{% block content %}
 <!-- Hero Section -->
-<section class="hero">
-  <h1>FOR STUDENTS<br>BY STUDENTS</h1>
-  <button onclick="window.location.href='{% url 'srcweb:events' %}'">Explore</button>
+<section class="hero text-center my-4">
+    <h1>FOR STUDENTS<br>BY STUDENTS</h1>
+    <button id="explore-button" data-url="{% url 'srcweb:events' %}" class="btn btn-primary mt-3">Explore</button>
 </section>
 
 <!-- Upcoming Events -->
-<section class="upcoming-events">
-  <h2>Upcoming Events</h2>
-
-  <!-- row 1 -->
-  <div class="event-grid">
-    <!-- Event card 1 -->
-    <div class="event-card">
-      <img src="{% static 'images/homepage/upcoming1.png' %}" alt="QMU Concert">
-      <h3>QMU Concert</h3>
-      <p>Thursday, Mar 10th, 7PM - 11PM</p>
-      <a href="{% url 'srcweb:eventdetails_student' %}">View Details</a>
+<section class="upcoming-events container my-4">
+    <h2 class="mb-3">Upcoming Events</h2>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="event-card">
+                <img src="{% static 'images/homepage/upcoming1.png' %}" alt="QMU Concert" class="img-fluid">
+                <h3>QMU Concert</h3>
+                <p>Thursday, Mar 10th, 7PM - 11PM</p>
+                <a href="{% url 'srcweb:eventdetails_student' %}" class="btn btn-link">View Details</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="event-card">
+                <img src="{% static 'images/homepage/upcoming2.png' %}" alt="OVO Hydro Concert" class="img-fluid">
+                <h3>OVO Hydro Concert</h3>
+                <p>Friday, Feb 21st, 7:30pm</p>
+                <a href="#" class="btn btn-link">View Details</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="event-card">
+                <img src="{% static 'images/homepage/upcoming3.png' %}" alt="Charity Event" class="img-fluid">
+                <h3>Charity Event</h3>
+                <p>Sunday, Feb 23rd, 12pm</p>
+                <a href="#" class="btn btn-link">View Details</a>
+            </div>
+        </div>
     </div>
-
-    <!-- Event card 2 -->
-    <div class="event-card">
-      <img src="{% static 'images/homepage/upcoming2.png' %}" alt="OVO Hydro Concert">
-      <h3>OVO Hydro Concert</h3>
-      <p>Friday, Feb 21st, 7:30pm</p>
-      <a href="#">View Details</a>
+    <div class="row mt-3">
+        <div class="col-md-4 mb-3">
+            <div class="event-card">
+                <img src="{% static 'images/homepage/upcoming4.png' %}" alt="Book Bootcamp" class="img-fluid">
+                <h3>Book Bootcamp</h3>
+                <p>Saturday, Mar 1st, 2pm</p>
+                <a href="#" class="btn btn-link">View Details</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="event-card">
+                <img src="{% static 'images/homepage/upcoming5.png' %}" alt="Market & Pub Tour" class="img-fluid">
+                <h3>Market & Pub Tour</h3>
+                <p>Sunday, Mar 2nd, 1pm</p>
+                <a href="#" class="btn btn-link">View Details</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="event-card">
+                <img src="{% static 'images/homepage/upcoming6.png' %}" alt="Community Cleanup" class="img-fluid">
+                <h3>Community Cleanup</h3>
+                <p>Monday, Mar 3rd, 10am</p>
+                <a href="#" class="btn btn-link">View Details</a>
+            </div>
+        </div>
     </div>
-
-    <!-- Event card 3 -->
-    <div class="event-card">
-      <img src="{% static 'images/homepage/upcoming3.png' %}" alt="Charity Event">
-      <h3>Charity Event</h3>
-      <p>Sunday, Feb 23rd, 12pm</p>
-      <a href="#">View Details</a>
-    </div>
-  </div>
-
-  <!-- row 2 -->
-  <div class="event-grid" style="margin-top: 1rem;">
-    <!-- Event card 4 -->
-    <div class="event-card">
-      <img src="{% static 'images/homepage/upcoming4.png' %}" alt="Book Bootcamp">
-      <h3>Book Bootcamp</h3>
-      <p>Saturday, Mar 1st, 2pm</p>
-      <a href="#">View Details</a>
-    </div>
-
-    <!-- Event card 5 -->
-    <div class="event-card">
-      <img src="{% static 'images/homepage/upcoming5.png' %}" alt="Market & Pub Tour">
-      <h3>Market & Pub Tour</h3>
-      <p>Sunday, Mar 2nd, 1pm</p>
-      <a href="#">View Details</a>
-    </div>
-
-    <!-- Event card 6 -->
-    <div class="event-card">
-      <img src="{% static 'images/homepage/upcoming6.png' %}" alt="Community Cleanup">
-      <h3>Community Cleanup</h3>
-      <p>Monday, Mar 3rd, 10am</p>
-      <a href="#">View Details</a>
-    </div>
-  </div>
 </section>
+{% endblock content %}
 
-<!-- Footer (optional) -->
-<footer>
-  <p>&copy; 2025 Student Events</p>
-</footer>
-
-<!-- ========== Sign Up Modal ========== -->
-<div id="signupModal" class="modal-overlay">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeSignupModal()">×</button>
-    <h2>Create a Profile</h2>
-    <p>Select account type:</p>
-    <div class="account-type-buttons">
-      <button onclick="selectAccountType('student')">Student</button>
-      <button onclick="selectAccountType('staff')">Staff</button>
-    </div>
-    <div id="signupFormContainer" style="display:none; margin-top: 1rem;">
-      <form id="signupForm">
-        <input type="hidden" id="accountType" name="accountType" value="">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter username" required>
-        <label for="email" style="margin-top: 0.5rem;">Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter email" required>
-        <label for="password" style="margin-top: 0.5rem;">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter password" required>
-        <button type="submit">Create Account</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Open Sign Up Modal
-  function openSignupModal() {
-    document.getElementById('signupModal').style.display = 'flex';
-  }
-  // Close Sign Up Modal
-  function closeSignupModal() {
-    document.getElementById('signupModal').style.display = 'none';
-    document.getElementById('signupFormContainer').style.display = 'none';
-    document.getElementById('accountType').value = '';
-  }
-  // Handle account type selection and show form
-  function selectAccountType(type) {
-    document.getElementById('accountType').value = type;
-    document.getElementById('signupFormContainer').style.display = 'block';
-  }
-  // Attach event listener to Sign Up button
-  document.addEventListener('DOMContentLoaded', function() {
-    // Assuming the third button in nav-right is Sign Up
-    var navRightButtons = document.querySelectorAll('.nav-right button');
-    if(navRightButtons.length >= 3) {
-      navRightButtons[2].onclick = openSignupModal;
-    }
-  });
-  // Handle form submission (for demonstration only)
-  document.getElementById('signupForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var accountType = document.getElementById('accountType').value;
-    var username = document.getElementById('username').value;
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
-    console.log('Creating account:', accountType, username, email, password);
-    // Here you would send the data to your backend to create the profile.
-    closeSignupModal();
-  });
-</script>
-
-</body>
-</html>
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock extra_js %}
