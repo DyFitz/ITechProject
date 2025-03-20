@@ -4,240 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>QMU Concert - Event Details</title>
-    <style>
-        /* ========== Basic reset ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* ========== Container layout ========== */
-        header, main, footer {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 0;
-        }
-
-        /* ========== Top bar (header) ========== */
-        .top-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .left-items {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .back-btn {
-            text-decoration: none;
-            color: #333;
-            padding: 0.5rem 1rem;
-            background-color: #eee;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
-        }
-
-        .back-btn:hover {
-            background-color: #ddd;
-        }
-
-        .logo h2 {
-            margin: 0;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #333;
-            margin-left: 1rem;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            margin-left: 1rem;
-        }
-
-        /* ========== Hero section ========== */
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            background: url("{% static 'images/eventdetailstop.png' %}") center/cover no-repeat;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        /* ========== Event details section ========== */
-        .event-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .description, .event-location {
-            flex: 1;
-            background-color: #fff;
-            padding: 1rem;
-            border-radius: 8px;
-            min-width: 280px; /* Ensure it doesn't become too narrow on small screens */
-        }
-
-        .description h2, .event-location h2 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .description p, .event-location p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* ========== Booking button section ========== */
-        .action {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .action button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .action button:hover {
-            background-color: #0056b3;
-        }
-
-        /* ========== Other events section ========== */
-        .other-events {
-            margin-bottom: 2rem;
-        }
-
-        .other-events h2 {
-            margin-bottom: 1rem;
-        }
-
-        .event-card-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .event-card {
-            flex: 1;
-            min-width: 200px;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .event-card img {
-            width: 100%;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 0.5rem;
-        }
-
-        .event-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        /* ========== Footer ========== */
-        footer {
-            text-align: center;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* ========== Modal (overlay + content) ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none; /* hidden by default */
-            align-items: center;
-            justify-content: center;
-            z-index: 999; /* on top of everything */
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal-content {
-            background: #fff;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 8px;
-            padding: 1.5rem;
-            position: relative;
-        }
-        .modal-content h3 {
-            margin-bottom: 1rem;
-        }
-        .modal-content label {
-            display: block;
-            margin-top: 0.5rem;
-        }
-        .modal-content input {
-            width: 100%;
-            margin-top: 0.25rem;
-            padding: 0.5rem;
-            box-sizing: border-box;
-        }
-        .modal-content button {
-            margin-top: 1rem;
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background: #007BFF;
-            color: #fff;
-        }
-        .modal-content button:hover {
-            background: #0056b3;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/eventdetails_student.css' %}">
 </head>
 <body>
 
@@ -256,9 +24,9 @@
             </nav>
             <a href="{% url 'srcweb:myaccount' %}">
                 <img
-                    src="{% static 'images/avatar.png' %}"
-                    alt="User Avatar"
-                    class="avatar"
+                        src="{% static 'images/avatar.png' %}"
+                        alt="User Avatar"
+                        class="avatar"
                 />
             </a>
         </div>
@@ -298,14 +66,14 @@
             <!-- Embedded Google Map. Clicking the map opens the full view in a new tab -->
             <a href="https://www.google.com/maps/place/University+of+Glasgow" target="_blank">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12976.326882352516!2d-4.25143305!3d55.86423785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488847a4204d50d9%3A0x8ec12345678!2sUniversity+of+Glasgow!5e0!3m2!1sen!2suk!4v1589654963141!5m2!1sen!2suk"
-                    width="100%"
-                    height="200"
-                    frameborder="0"
-                    style="border:0;"
-                    allowfullscreen=""
-                    aria-hidden="false"
-                    tabindex="0">
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12976.326882352516!2d-4.25143305!3d55.86423785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x488847a4204d50d9%3A0x8ec12345678!2sUniversity+of+Glasgow!5e0!3m2!1sen!2suk!4v1589654963141!5m2!1sen!2suk"
+                        width="100%"
+                        height="200"
+                        frameborder="0"
+                        style="border:0;"
+                        allowfullscreen=""
+                        aria-hidden="false"
+                        tabindex="0">
                 </iframe>
             </a>
             <p><strong>Organizer Contact:</strong> 044-0451230764</p>
@@ -355,41 +123,41 @@
 
 <!-- ========== Modal for Booking ========== -->
 <div class="modal-overlay" id="bookingModal" onclick="overlayClick(event)">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeBookingModal()">×</button>
-    <h3>Book My Place</h3>
-    <form>
-      <label for="username">Name</label>
-      <input type="text" id="username" name="username" placeholder="Your name..." required />
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeBookingModal()">×</button>
+        <h3>Book My Place</h3>
+        <form>
+            <label for="username">Name</label>
+            <input type="text" id="username" name="username" placeholder="Your name..." required/>
 
-      <label for="useremail">Email</label>
-      <input type="email" id="useremail" name="useremail" placeholder="Your email..." required />
+            <label for="useremail">Email</label>
+            <input type="email" id="useremail" name="useremail" placeholder="Your email..." required/>
 
-      <label for="userphone">Phone</label>
-      <input type="tel" id="userphone" name="userphone" placeholder="Your phone..." />
+            <label for="userphone">Phone</label>
+            <input type="tel" id="userphone" name="userphone" placeholder="Your phone..."/>
 
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </div>
 
 <script>
-  // Open the modal
-  function openBookingModal() {
-    document.getElementById('bookingModal').classList.add('show');
-  }
-
-  // Close the modal
-  function closeBookingModal() {
-    document.getElementById('bookingModal').classList.remove('show');
-  }
-
-  // Close modal if clicking outside of the modal content
-  function overlayClick(event) {
-    if (event.target.id === 'bookingModal') {
-      closeBookingModal();
+    // Open the modal
+    function openBookingModal() {
+        document.getElementById('bookingModal').classList.add('show');
     }
-  }
+
+    // Close the modal
+    function closeBookingModal() {
+        document.getElementById('bookingModal').classList.remove('show');
+    }
+
+    // Close modal if clicking outside of the modal content
+    function overlayClick(event) {
+        if (event.target.id === 'bookingModal') {
+            closeBookingModal();
+        }
+    }
 </script>
 
 </body>
