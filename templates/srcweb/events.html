@@ -1,15 +1,14 @@
+{% extends "srcweb/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Events Page</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/events.css' %}">
-</head>
-<body>
 
-<!-- Top Bar -->
+{% block title %}Events Page{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/events.css' %}">
+{% endblock extra_css %}
+
+{% block header %}
 <header>
   <div class="left-header">
     <!-- Home link -> go to home page -->
@@ -18,13 +17,16 @@
   </div>
   <div class="right-header" id="rightHeader">
     <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="top-avatar">
+    <!-- 保持原先 onclick，但最好拆到外部 js，这里示例保留 -->
     <span class="dropdown-icon" onclick="toggleDropdown()">▼</span>
     <div class="dropdown-menu" id="dropdownMenu">
       <a href="#">Logout</a>
     </div>
   </div>
 </header>
+{% endblock header %}
 
+{% block content %}
 <div class="container">
   <!-- Sidebar -->
   <div class="sidebar">
@@ -179,29 +181,14 @@
     </div>
   </div>
 </div>
+{% endblock content %}
 
-<script>
-  // Toggle dropdown menu
-  function toggleDropdown() {
-    const menu = document.getElementById('dropdownMenu');
-    if (menu.style.display === '' || menu.style.display === 'none') {
-      menu.style.display = 'block';
-    } else {
-      menu.style.display = 'none';
-    }
-  }
+{% block footer %}
+<footer>
+  <p>&copy; 2025 My Site</p>
+</footer>
+{% endblock footer %}
 
-  // Hide dropdown if click outside
-  document.addEventListener('click', function(e) {
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const rightHeader = document.getElementById('rightHeader');
-    if (!rightHeader.contains(e.target)) {
-      dropdownMenu.style.display = 'none';
-    }
-  });
-</script>
-
-</body>
-</html>
-
-
+{% block extra_js %}
+<script src="{% static 'js/events.js' %}"></script>
+{% endblock extra_js %}

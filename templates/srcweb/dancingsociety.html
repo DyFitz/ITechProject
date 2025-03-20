@@ -1,126 +1,104 @@
+{% extends "srcweb/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Football Society</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dancingsociety.css' %}">
-</head>
-<body>
+{% block title %}Football Society{% endblock title %}
 
-<!-- Header -->
-<header>
-    <div class="top-bar">
-        <div class="left-items">
-            <!-- Back arrow link (replace "#" with actual route or JS if needed) -->
-            <a href="#" class="back-btn">&#8592;</a>
-            <div class="society-title">Football Society</div>
-        </div>
-        <div class="right-items">
-            <nav>
-                <a href="#">Favorite Societies</a>
-            </nav>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dancingsociety.css' %}">
+{% endblock extra_css %}
+
+{% block header %}
+<header class="d-flex justify-content-between align-items-center p-3 bg-white border-bottom">
+    <div class="left-items d-flex align-items-center">
+        <a href="#" class="back-btn me-2">&#8592;</a>
+        <div class="society-title">
+            <h2>Football Society</h2>
         </div>
     </div>
+    <div class="right-items">
+        <nav>
+            <a href="#">Favorite Societies</a>
+        </nav>
+    </div>
 </header>
+{% endblock header %}
 
-<!-- Hero section -->
-<section class="hero">
-    <h1>Football Society</h1>
-</section>
-
-<!-- Main content -->
-<main>
-
-    <!-- My Events section -->
-    <section class="my-events">
-        <div class="my-events-header">
+{% block content %}
+<main class="container my-4">
+    <section class="hero text-center mb-4">
+        <h1>Football Society</h1>
+    </section>
+    <section class="my-events mb-4">
+        <div class="my-events-header d-flex justify-content-between align-items-center mb-3">
             <h2>My Events</h2>
             <div class="event-buttons">
-                <button>Create Events</button>
-                <button>Edit Events</button>
+                <button class="btn btn-primary me-2">Create Events</button>
+                <button class="btn btn-secondary">Edit Events</button>
             </div>
         </div>
-
-        <!-- Ongoing Events -->
-        <div class="event-section">
+        <div class="event-section mb-4">
             <h3>Ongoing Events</h3>
-            <div class="event-grid">
-                <!-- Card 1 -->
-                <div class="event-card">
-                    <img src="event1-placeholder.jpg" alt="Ongoing Event 1">
-                    <div class="event-card-content">
-                        <h4>Match vs. Team A</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event1-placeholder.jpg" alt="Ongoing Event 1" class="img-fluid mb-2">
+                        <h4 class="h6">Match vs. Team A</h4>
                         <p>Sunday, 2pm - 4pm</p>
                     </div>
                 </div>
-                <!-- Card 2 -->
-                <div class="event-card">
-                    <img src="event2-placeholder.jpg" alt="Ongoing Event 2">
-                    <div class="event-card-content">
-                        <h4>Practice Session</h4>
+                <div class="col-md-6 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event2-placeholder.jpg" alt="Ongoing Event 2" class="img-fluid mb-2">
+                        <h4 class="h6">Practice Session</h4>
                         <p>Wednesday, 6pm - 8pm</p>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Past Events -->
-        <div class="event-section">
+        <div class="event-section mb-4">
             <h3>Past Events</h3>
-            <div class="event-grid">
-                <!-- Card 1 -->
-                <div class="event-card">
-                    <img src="event3-placeholder.jpg" alt="Past Event 1">
-                    <div class="event-card-content">
-                        <h4>Charity Match</h4>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event3-placeholder.jpg" alt="Past Event 1" class="img-fluid mb-2">
+                        <h4 class="h6">Charity Match</h4>
                         <p>Last Saturday, 3pm - 5pm</p>
                     </div>
                 </div>
-                <!-- Card 2 -->
-                <div class="event-card">
-                    <img src="event4-placeholder.jpg" alt="Past Event 2">
-                    <div class="event-card-content">
-                        <h4>Open Training</h4>
+                <div class="col-md-4 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event4-placeholder.jpg" alt="Past Event 2" class="img-fluid mb-2">
+                        <h4 class="h6">Open Training</h4>
                         <p>Last Wednesday, 6pm - 8pm</p>
                     </div>
                 </div>
-                <!-- Card 3 -->
-                <div class="event-card">
-                    <img src="event5-placeholder.jpg" alt="Past Event 3">
-                    <div class="event-card-content">
-                        <h4>Team Bonding</h4>
+                <div class="col-md-4 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event5-placeholder.jpg" alt="Past Event 3" class="img-fluid mb-2">
+                        <h4 class="h6">Team Bonding</h4>
                         <p>Two Weeks Ago</p>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Sold Out Events -->
         <div class="event-section">
             <h3>Sold out Events</h3>
-            <div class="event-grid">
-                <!-- Card 1 -->
-                <div class="event-card">
-                    <img src="event6-placeholder.jpg" alt="Sold Out Event 1">
-                    <div class="event-card-content">
-                        <h4>Final Tournament</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event6-placeholder.jpg" alt="Sold Out Event 1" class="img-fluid mb-2">
+                        <h4 class="h6">Final Tournament</h4>
                         <p>Friday, 7pm - 9pm</p>
                     </div>
                 </div>
-                <!-- Card 2 -->
-                <div class="event-card">
-                    <img src="event7-placeholder.jpg" alt="Sold Out Event 2">
-                    <div class="event-card-content">
-                        <h4>Friendly Match</h4>
+                <div class="col-md-6 mb-3">
+                    <div class="event-card bg-white p-3 text-center">
+                        <img src="event7-placeholder.jpg" alt="Sold Out Event 2" class="img-fluid mb-2">
+                        <h4 class="h6">Friendly Match</h4>
                         <p>August 15th, 5pm</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
 </main>
-</body>
-</html>
+{% endblock content %}

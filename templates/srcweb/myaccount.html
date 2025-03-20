@@ -1,111 +1,115 @@
+{% extends "srcweb/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>My Account</title>
-  link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/myaccount.css' %}">
-</head>
-<body>
 
+{% block title %}My Account{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/myaccount.css' %}">
+{% endblock extra_css %}
+
+{% block header %}
 <!-- Header -->
 <header>
-  <div class="top-bar">
-    <div class="left-items">
-      <h2>My Account</h2>
+    <div class="top-bar">
+        <div class="left-items">
+            <h2>My Account</h2>
+        </div>
+        <div class="right-items">
+            <nav>
+                <a href="#">EventSocieties</a>
+            </nav>
+            <!-- User avatar -->
+            <img
+                    src="{% static 'images/avatar.png' %}"
+                    alt="User Avatar"
+                    class="avatar"
+                    id="avatar"
+                    data-url="#"
+            />
+        </div>
     </div>
-    <div class="right-items">
-      <nav>
-        <a href="#">EventSocieties</a>
-      </nav>
-      <!-- User avatar -->
-      <img
-        src="{% static 'images/avatar.png' %}"
-        alt="User Avatar"
-        class="avatar"
-        onclick="window.location.href='#'"
-      />
-    </div>
-  </div>
 </header>
+{% endblock header %}
 
+{% block content %}
 <!-- Main content -->
 <main>
+    <!-- Hero section -->
+    <section class="hero">
+        <h1>Welcome to Your Account</h1>
+    </section>
 
-  <!-- Hero section -->
-  <section class="hero">
-    <h1>Welcome to Your Account</h1>
-  </section>
+    <!-- My Upcoming Events section -->
+    <section class="upcoming-events">
+        <h2>My Upcoming Events</h2>
+        <div class="event-grid">
+            <!-- Event card 1 -->
+            <div class="event-card">
+                <img src="{% static 'images/eventdetailstop.png' %}" alt="QMU Concert">
+                <h3>QMU Concert</h3>
+                <p>Thursday, Mar 10th, 7PM - 11PM</p>
+                <a href="{% url 'srcweb:eventdetails_student' %}">View Details</a>
+            </div>
+            <!-- Event card 2 -->
+            <div class="event-card">
+                <img src="#" alt="OVO Hydro Concert">
+                <h3>OVO Hydro Concert</h3>
+                <p>Friday, Feb 21st, 7:30pm</p>
+                <a href="#">View Details</a>
+            </div>
+            <!-- Event card 3 -->
+            <div class="event-card">
+                <img src="#" alt="Charity Event">
+                <h3>Charity Event</h3>
+                <p>Sunday, Feb 23rd, 12pm</p>
+                <a href="#">View Details</a>
+            </div>
+        </div>
+    </section>
 
-  <!-- My Upcoming Events section -->
-  <section class="upcoming-events">
-    <h2>My Upcoming Events</h2>
-    <div class="event-grid">
-      <!-- Event card 1 -->
-      <div class="event-card">
-        <img src="{% static 'images/eventdetailstop.png' %}" alt="QMU Concert">
-        <h3>QMU Concert</h3>
-        <p>Thursday, Mar 10th, 7PM - 11PM</p>
-        <a href="{% url 'srcweb:eventdetails_student' %}">View Details</a>
-      </div>
-      <!-- Event card 2 -->
-      <div class="event-card">
-        <img src="#" alt="OVO Hydro Concert">
-        <h3>OVO Hydro Concert</h3>
-        <p>Friday, Feb 21st, 7:30pm</p>
-        <a href="#">View Details</a>
-      </div>
-      <!-- Event card 3 -->
-      <div class="event-card">
-        <img src="#" alt="Charity Event">
-        <h3>Charity Event</h3>
-        <p>Sunday, Feb 23rd, 12pm</p>
-        <a href="#">View Details</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- My Reviews section -->
-  <section class="my-reviews">
-    <h2>My Reviews</h2>
-    <div class="review-grid">
-      <!-- Review card 1 -->
-      <div class="review-card">
-        <h4>Johnny</h4>
-        <div class="stars">★★★★★</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-      <!-- Review card 2 -->
-      <div class="review-card">
-        <h4>Johnny</h4>
-        <div class="stars">★★★★☆</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-      <!-- Review card 3 (optional) -->
-      <div class="review-card">
-        <h4>Johnny</h4>
-        <div class="stars">★★★★★</div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-    </div>
-  </section>
-
+    <!-- My Reviews section -->
+    <section class="my-reviews">
+        <h2>My Reviews</h2>
+        <div class="review-grid">
+            <!-- Review card 1 -->
+            <div class="review-card">
+                <h4>Johnny</h4>
+                <div class="stars">★★★★★</div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+            <!-- Review card 2 -->
+            <div class="review-card">
+                <h4>Johnny</h4>
+                <div class="stars">★★★★☆</div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+            <!-- Review card 3 -->
+            <div class="review-card">
+                <h4>Johnny</h4>
+                <div class="stars">★★★★★</div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+        </div>
+    </section>
 </main>
+{% endblock content %}
 
-<!-- Footer -->
+{% block footer %}
 <footer>
-  <p>&copy; 2025 My Account Page</p>
+    <p>&copy; 2025 My Account Page</p>
 </footer>
+{% endblock footer %}
 
-</body>
-</html>
+{% block extra_js %}
+<script src="{% static 'js/myaccount.js' %}"></script>
+{% endblock extra_js %}
+
