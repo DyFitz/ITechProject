@@ -27,14 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1xtg%_)$$y39bqr(zeydbj+tz_uid!6gqbmdp9b*t%t$wsx95c'
-
 # Load the secret key and allowed hosts from environment variables
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+DEBUG = env('DEBUG', default=True)
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -145,6 +142,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='src-no-reply@protonmail.com')
 
 # Security settings for production
-SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=True)
+# settings.py
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=False)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

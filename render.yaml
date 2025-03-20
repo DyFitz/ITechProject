@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: srcwebproject
+    name: ITechProject
     env: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn srcwebproject.wsgi:application --log-file -"
