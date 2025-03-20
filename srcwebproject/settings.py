@@ -59,6 +59,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'srcwebproject.urls'
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# Directory where collectstatic will place all static files for production
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 
 TEMPLATES = [
     {
