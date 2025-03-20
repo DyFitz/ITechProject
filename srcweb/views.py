@@ -22,6 +22,8 @@ def myaccount(request):
 def dancingsociety(request):
     return render(request, 'srcweb/dancingsociety.html')
 
+
+# Allows users with add event permission to create events
 @permission_required('srcweb.add_event', raise_exception=True)
 def create_event(request):
     if request.method == 'POST':

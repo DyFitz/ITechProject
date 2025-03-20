@@ -1,3 +1,8 @@
+
+# This YAML file specifies the deployment configuration for the Render platform.
+# It defines the environment type, build commands, startup commands, hosting plan,
+# and environment variables sourced from Render's dashboard for secure and easy deployment.
+
 services:
   - type: web
     name: ITechProject

@@ -5,26 +5,24 @@ from django.contrib.contenttypes.models import ContentType
 from .models import Profile
 
 
+# Signal triggered after database migrations to create user groups with permissions
 @receiver(post_migrate)
 def create_user_groups(sender, **kwargs):
-    # Only run for our app
     if sender.name == 'srcweb':
-        # Get the ContentType for the Event model
         event_ct = ContentType.objects.get(app_label='srcweb', model='event')
 
-        # Create or update the Events Coordinator group
+        # Creates Events Coordinator group and assigns all permissions on Event model
         coordinator_group, created = Group.objects.get_or_create(name='Events Coordinator')
-        # Grant all permissions (add, change, delete, view) on the Event model
         perms = Permission.objects.filter(content_type=event_ct)
         coordinator_group.permissions.set(perms)
 
-        # Create or update the Student group
+        # Creates Student group and assigns view-only permission on Event model
         student_group, created = Group.objects.get_or_create(name='Student')
-        # Grant only the view permission for the Event model (optional)
         view_permission = Permission.objects.get(content_type=event_ct, codename='view_event')
         student_group.permissions.set([view_permission])
 
 
+# Automatically assigns new users to groups based on their profile user type
 @receiver(post_save, sender=User)
 def assign_user_to_group(sender, instance, created, **kwargs):
     if created:

@@ -11,6 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+# Sets default Django settings module for WSGI
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'srcwebproject.settings')
 
+# Initialises WSGI application to serve Django project
 application = get_wsgi_application()

@@ -14,22 +14,21 @@ import os
 from pathlib import Path
 import environ
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Base directory of the project
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# TEMPLATE_DIR explicitly defines where template files are stored
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# Initialize environment variables
+# Initialise Django-environ to manage sensitive data using environment variables
 BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env = environ.Env(DEBUG=(bool, False))  # Create environ instance with default debug off
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))    # Reads the .env file into environment variables
 
 # Load the secret key and allowed hosts from environment variables
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG', default=True)
+# ALLOWED_HOSTS restricts domains/IP addresses that can serve this Django application
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["itechproject.onrender.com", "localhost", "127.0.0.1"])
 
 
@@ -58,18 +57,21 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'srcwebproject.urls'
 
+
+# URL to access static files
 STATIC_URL = '/static/'
+# Additional static file directories for Django to search when looking for static assets
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
-# Directory where collectstatic will place all static files for production
+# Directory where Django collects all static files into a single location during production deployment
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR, ],
+        'DIRS': [TEMPLATE_DIR, ],   # Explicit path to template directories
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,10 +87,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'srcwebproject.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# Database configuration using environment variables.
+# DATABASE configuration, specifying how Django connects to the project's database
+# Here using SQLite as default
 DATABASES = {
     'default': {
         'ENGINE': env('DB_ENGINE', default='django.db.backends.sqlite3'),
@@ -97,8 +97,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -130,25 +128,23 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
-
-# Specify the default auto field (recommended in Django 3.2+)
+# Default type of auto generated primary keys for Django models
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Email settings for ProtonMail Bridge
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST')            # e.g., 127.0.0.1 (provided by ProtonMail Bridge)
-EMAIL_PORT = env.int('EMAIL_PORT', default=1025)  # Use the port specified by ProtonMail Bridge
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # your ProtonMail account, e.g., src-no-reply@protonmail.com
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='src-no-reply@protonmail.com')
+# Configuration for sending emails using ProtonMail Bridge
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'   # SMTP backend
+EMAIL_HOST = env('EMAIL_HOST')            # SMTP server address
+EMAIL_PORT = env.int('EMAIL_PORT', default=1025)  # SMTP port provided by ProtonMail Bridge
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True) # Enable Transport Layer Security (TLS)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # Email account username
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')    # SMTP email password from ProtonMail Bridge
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='src-no-reply@protonmail.com')   # Default sender email address
 
-# Security settings for production
-# settings.py
+
+# Redirect HTTP to HTTPS (True in production, False in local development)
 SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=False)
+# Ensures cookies are sent over HTTPS connections only
 SESSION_COOKIE_SECURE = True
+# Protects CSRF cookie transmission by enforcing HTTPS
 CSRF_COOKIE_SECURE = True

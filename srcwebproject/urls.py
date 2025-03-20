@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from srcweb import views
 
+
+
+# Root URL configuration mapping URLs to views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('srcweb.urls')),
-
+    path('', include('srcweb.urls')),   # Includes all URLs defined in the srcweb app
 ]
