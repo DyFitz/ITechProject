@@ -23,13 +23,21 @@ def create_user_groups(sender, **kwargs):
 
 
 # Automatically assigns new users to groups based on their profile user type
-@receiver(post_save, sender=User)
-def assign_user_to_group(sender, instance, created, **kwargs):
-    if created:
-        # Ensure the user has an associated Profile
-        if hasattr(instance, 'profile'):
-            if instance.profile.user_type == 'coordinator':
-                group = Group.objects.get(name='Events Coordinator')
-            else:
-                group = Group.objects.get(name='Student')
-            instance.groups.add(group)
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import Group
+from srcweb.models import Profile
+
+
+@receiver(post_save, sender=Profile)
+def update_user_group(sender, instance, **kwargs):
+    user = instance.user
+    # Clear existing groups (if you want to enforce a strict one-group policy)
+    user.groups.clear()
+
+    if instance.user_type == 'coordinator':
+        group = Group.objects.get(name='Events Coordinator')
+    else:
+        group = Group.objects.get(name='Student')
+
+    user.groups.add(group)
