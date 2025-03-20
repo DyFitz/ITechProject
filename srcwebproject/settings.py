@@ -30,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Load the secret key and allowed hosts from environment variables
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG', default=True)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["itechproject.onrender.com", "localhost", "127.0.0.1"])
 
 
 
